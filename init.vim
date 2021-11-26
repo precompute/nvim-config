@@ -12,7 +12,7 @@ Plug 'mhinz/vim-startify'
 Plug 'tpope/vim-commentary'
 Plug 'eagletmt/ghcmod-vim'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
-Plug 'sheerun/vim-polyglot'
+" Plug 'sheerun/vim-polyglot'
 Plug 'Yggdroot/indentLine'
 Plug 'godlygeek/csapprox'
 " Plug 'vim-scripts/c.vim', {'for': ['c', 'cpp']}
@@ -45,7 +45,7 @@ Plug 'nelstrom/vim-markdown-folding'
 " Plug 'mattn/emmet-vim'
 " Plug 'janlazo/vim-bang-terminal'
 " Plug 'turbio/bracey.vim'
-Plug 'airblade/vim-gitgutter'
+" Plug 'airblade/vim-gitgutter'
 "Plug 'bling/vim-bufferline'
 Plug 'godlygeek/tabular'
 Plug 'lervag/vimtex'
@@ -67,6 +67,13 @@ Plug 'chriskempson/base16-vim'
 Plug 'arp242/confirm_quit.vim'
 Plug 'justinmk/vim-sneak'
 Plug 'tpope/vim-vinegar' "netrw enhancements
+Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
+Plug 'catppuccin/nvim'
+Plug 'mrjones2014/lighthaus.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'lewis6991/gitsigns.nvim', {'do': 'setup'}
+" require('gitsigns').setup()
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} 
 call plug#end()
 
 "<F2> left
@@ -80,6 +87,7 @@ call plug#end()
 "<F10> q
 "<F12> x
 
+" set statusline+=%{get(b:,'gitsigns_status','')}
 "<F9> undotree
 
 set laststatus=2
@@ -96,7 +104,7 @@ set ttyfast
 "     " color gruvbox8_hard
 " endif
 " doesn't really work ^
-color base16-black-metal-khold "tempus_tempest base16-default-dark peaksea preto tender fu gruvbox8_hard tempus_summer
+color tokyonight "lighthaus_dark tokyonight base16-black-metal-khold tempus_tempest base16-default-dark peaksea preto tender fu gruvbox8_hard tempus_summer
 "maui cool phoenix darkZ OceanicNextloogica gruvbox cottonmouse minimalist moff pomelo marklar marussian neonbrain blaquemagick lopuch miko miromiro codeburn relaxedgreen fu preto sky fokus
 "colorscheme Chasing_Logic
 ""fx
@@ -186,8 +194,8 @@ set shiftround
 "map <Super_L> <Esc>
 "nnoremap <Super_L> <Esc>
 "inoremap <Super_L> <Esc>
-inoremap >>> ->
-inoremap <<< <-
+" inoremap >>> ->
+" inoremap <<< <-
 imap kj <Esc>
 " noremap <Alt>  <Esc>
 "nnoremap <Alt_R> <Esc>
@@ -554,3 +562,4 @@ let NVIM_TUI_ENABLE_TRUE_COLOR=1
 set termguicolors
 set t_ZH=^[[3m
 set t_ZR=^[[23m
+
