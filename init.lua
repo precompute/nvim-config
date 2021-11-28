@@ -1,4 +1,4 @@
--- Install packep
+-- Install packer
 local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
 
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
@@ -68,6 +68,16 @@ require('packer').startup(function()
     }
   }
   use 'smithbm2316/centerpad.nvim' -- center a buffer by creating two on either side
+  use {
+    'windwp/nvim-autopairs', -- automatic pairs
+    config = function()
+      require('nvim-autopairs').setup{}
+    end
+  }
+  use {'nvim-orgmode/orgmode', config = function()
+         require('orgmode').setup{}
+  end
+  }
 end)
 
 --Incremental live completion (note: this is now a default on master)
@@ -362,7 +372,8 @@ vim.g.startify_files_number = 1000
 -- }
 
 -- lualine setup
-require'lualine'.setup {
+local lualine = require 'lualine'
+local lualine_config = {
   options = {
     icons_enabled = false,
     theme = 'palenight',
@@ -372,13 +383,14 @@ require'lualine'.setup {
     always_divide_middle = true,
   },
   sections = {
-    lualine_a = {'mode'},
-    lualine_b = {'branch', 'diff',
-                  {'diagnostics', sources={'nvim_lsp', 'coc'}}},
-    lualine_c = {'filename'},
-    lualine_x = {'encoding', 'fileformat', 'filetype'},
-    lualine_y = {'progress'},
-    lualine_z = {'location'}
+    -- lualine_a = {'mode'},
+    lualine_a = {'filename'},
+    lualine_b = {'filetype'},
+    lualine_c = {'progress', 'location'},
+    lualine_x = {},
+    lualine_y = {'encoding', 'fileformat'},
+    lualine_z = {'branch', 'diff',
+                  {'diagnostics', sources={'nvim_lsp'}}}
   },
   inactive_sections = {
     lualine_a = {},
@@ -391,6 +403,8 @@ require'lualine'.setup {
   tabline = {},
   extensions = {}
 }
+
+lualine.setup(lualine_config)
 
 -- mapx
 require'mapx'.setup{ global = true }
@@ -526,3 +540,29 @@ require'nvim-tree'.setup {
     }
   }
 }
+
+-- org mode
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.org = {
+  install_info = {
+    url = 'https://github.com/milisims/tree-sitter-org',
+    revision = 'main',
+    files = {'src/parser.c', 'src/scanner.cc'},
+  },
+  filetype = 'org',
+}
+
+require'nvim-treesitter.configs'.setup {
+  -- If TS highlights are not enabled at all, or disabled via `disable` prop, highlighting will fallback to default Vim syntax highlighting
+  highlight = {
+    enable = true,
+    disable = {'org'}, -- Remove this to use TS highlighter for some of the highlights (Experimental)
+    additional_vim_regex_highlighting = {'org'}, -- Required since TS highlighter doesn't support all syntax features (conceal)
+  },
+  ensure_installed = {'org'}, -- Or run :TSUpdate org
+}
+
+require('orgmode').setup({
+  org_agenda_files = {'~/Dropbox/org/*', '~/my-orgs/**/*'},
+  org_default_notes_file = '~/Dropbox/org/refile.org',
+})
