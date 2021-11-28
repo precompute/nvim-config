@@ -1,4 +1,4 @@
--- Install packer
+-- Install packep
 local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
 
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
@@ -61,6 +61,13 @@ require('packer').startup(function()
   use 'nvim-lualine/lualine.nvim' -- statusline
   use 'b0o/mapx.nvim' -- easy key maps
   use 'max397574/better-escape.nvim' -- remove delay when using "escape" keys
+  use {
+    'kyazdani42/nvim-tree.lua', -- file tree sidebar
+    requires = {
+      'kyazdani42/nvim-web-devicons', -- optional, for file icon
+    }
+  }
+  use 'smithbm2316/centerpad.nvim' -- center a buffer by creating two on either side
 end)
 
 --Incremental live completion (note: this is now a default on master)
@@ -154,15 +161,15 @@ require('telescope').setup {
   },
 }
 --Add leader shortcuts
-vim.api.nvim_set_keymap('n', '<leader><space>', [[<cmd>lua require('telescope.builtin').buffers()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>sf', [[<cmd>lua require('telescope.builtin').find_files({previewer = false})<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>sb', [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>bb', [[<cmd>lua require('telescope.builtin').buffers()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader><space>', [[<cmd>lua require('telescope.builtin').find_files({previewer = false})<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>ss', [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>]], { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>sh', [[<cmd>lua require('telescope.builtin').help_tags()<CR>]], { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>st', [[<cmd>lua require('telescope.builtin').tags()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>sd', [[<cmd>lua require('telescope.builtin').grep_string()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>sp', [[<cmd>lua require('telescope.builtin').live_grep()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>sp', [[<cmd>lua require('telescope.builtin').grep_string()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>sd', [[<cmd>lua require('telescope.builtin').live_grep()<CR>]], { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>so', [[<cmd>lua require('telescope.builtin').tags{ only_current_buffer = true }<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>?', [[<cmd>lua require('telescope.builtin').oldfiles()<CR>]], { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>fr', [[<cmd>lua require('telescope.builtin').oldfiles()<CR>]], { noremap = true, silent = true })
 
 -- Treesitter configuration
 -- Parsers must be installed manually via :TSInstall
@@ -395,12 +402,23 @@ require'mapx'.setup{ global = true }
 -- inoremap("<S-Tab>", [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], "silent", "expr")
 -- map("<M-/>", ":Commentary<Cr>", "silent")
 -- cmd("LspDiag", function() vim.lsp.diagnostic.set_loclist() end, {nargs = 0})
+-- Maps
+nnoremap("<F5>", ":q<CR>")
+inoremap("<F5>", "<Esc>:q<CR>")
+nnoremap("<F6>", ":NvimTreeToggle<CR>")
+inoremap("<F6>", "<Esc>:NvimTreeToggle<CR>")
 nnoremap("<F9>", ":w<CR>")
 inoremap("<F9>", "<Esc>:w<CR>a")
 nnoremap("<F10>", ":q")
 inoremap("<F10>", "<Esc>:q")
 nnoremap("<F12>", ":x<CR>")
 inoremap("<F12>", "<Esc>:x<CR>a")
+nnoremap("zx", ":q<CR>")
+nnoremap("zs", ":w<CR>")
+nnoremap("ZX", ":q!<CR>")
+nnoremap("ZS", ":x<CR>")
+nnoremap("<leader>ff", ":e ")
+vim.api.nvim_set_keymap('n', '<leader>oo', "<cmd>lua require'centerpad'.toggle{ leftpad = 25, rightpad = 25 }<cr>", { silent = true, noremap = true })
 
 -- better escape
 require("better_escape").setup {
@@ -453,4 +471,58 @@ require('gitsigns').setup {
   yadm = {
     enable = false
   },
+}
+
+-- nvim-tree
+require'nvim-tree'.setup {
+  disable_netrw       = true,
+  hijack_netrw        = true,
+  open_on_setup       = false,
+  ignore_ft_on_setup  = {},
+  auto_close          = false,
+  open_on_tab         = true,
+  hijack_cursor       = false,
+  update_cwd          = false,
+  update_to_buf_dir   = {
+    enable = true,
+    auto_open = true,
+  },
+  diagnostics = {
+    enable = false,
+    icons = {
+      hint = "",
+      info = "",
+      warning = "",
+      error = "",
+    }
+  },
+  update_focused_file = {
+    enable      = false,
+    update_cwd  = false,
+    ignore_list = {}
+  },
+  system_open = {
+    cmd  = nil,
+    args = {}
+  },
+  filters = {
+    dotfiles = false,
+    custom = {}
+  },
+  git = {
+    enable = true,
+    ignore = false,
+    timeout = 500,
+  },
+  view = {
+    width = 30,
+    height = 30,
+    hide_root_folder = false,
+    side = 'left',
+    auto_resize = true,
+    mappings = {
+      custom_only = false,
+      list = {}
+    }
+  }
 }
