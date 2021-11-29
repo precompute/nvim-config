@@ -12,7 +12,7 @@ This is my config for a rainy day.  I tried to make it as similar to my configur
 
 I use Neovim 0.6.0.  This config should be immediately usable after running ~:PackerSync~.
 
-I ported my old vimscript config to lua.  The old config is saved as ~.back~.
+I ported my old vimscript config that I've been carrying since 2016 to lua.  The old config is saved as ~.back~.
 
 I used [[https://github.com/nvim-lua/kickstart.nvim][kickstart]] to familiarize myself with the new lua config.
 
