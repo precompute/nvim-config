@@ -1,3 +1,4 @@
+-- For help, see :h {vim.g vim.cmd vim.opt vim.fn.has}
 -- Install packer
 local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
 
@@ -78,13 +79,57 @@ require('packer').startup(function()
          require('orgmode').setup{}
   end
   }
+  use 'simnalamburt/vim-mundo' -- undo tree
+  -- use { -- I don't like it
+  --   'karb94/neoscroll.nvim', -- smooth scrolling
+  --   config = function()
+  --     require('neoscroll').setup({
+  --       -- All these keys will be mapped to their corresponding default scrolling animation
+  --       mappings = {'<C-u>', '<C-d>', '<C-b>', '<C-f>',
+  --         '<C-y>', '<C-e>', 'zt', 'zz', 'zb'},
+  --       hide_cursor = true,          -- Hide cursor while scrolling
+  --       stop_eof = true,             -- Stop at <EOF> when scrolling downwards
+  --       use_local_scrolloff = false, -- Use the local scope of scrolloff instead of the global scope
+  --       respect_scrolloff = false,   -- Stop scrolling when the cursor reaches the scrolloff margin of the file
+  --       cursor_scrolls_alone = true, -- The cursor will keep on scrolling even if the window cannot scroll further
+  --       easing_function = nil,        -- Default easing function
+  --       pre_hook = nil,              -- Function to run before the scrolling animation starts
+  --       post_hook = nil,              -- Function to run after the scrolling animation ends
+  --     })
+  --   end
+  -- }
+  use {
+    "folke/which-key.nvim", -- command hints, huge!
+    config = function()
+      require("which-key").setup {
+      }
+    end
+  }
+  use {
+    "folke/zen-mode.nvim", -- zen mode, does not show statusline
+    config = function()
+      require("zen-mode").setup {
+        plugins = {
+          options = {
+            enabled = true,
+            ruler = true,
+            showcmd = true,
+          },
+          twilight = { enabled = false }, 
+          gitsigns = { enabled = true },
+        }}
+    end
+  }
+  -- use 'roman/golden-ratio' -- golden ratio split
+  use 'tpope/vim-surround' -- surround with text
+  -- use 'wellle/visual-split.vim' -- split easily
 end)
 
 --Incremental live completion (note: this is now a default on master)
 vim.o.inccommand = 'nosplit'
 
 --Set highlight on search
-vim.o.hlsearch = false
+vim.o.hlsearch = true
 
 --Make line numbers default
 vim.wo.number = true
@@ -106,13 +151,12 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 
 --Decrease update time
-vim.o.updatetime = 250
+vim.o.updatetime = 50
 vim.wo.signcolumn = 'yes'
 
 --Set colorscheme (order is important here)
 vim.o.termguicolors = true
 -- vim.g.onedark_terminal_italics = 2
-vim.cmd [[colorscheme tokyonight]]
 
 --Set statusbar
 -- vim.g.lightline = {
@@ -171,15 +215,15 @@ require('telescope').setup {
   },
 }
 --Add leader shortcuts
-vim.api.nvim_set_keymap('n', '<leader>bb', [[<cmd>lua require('telescope.builtin').buffers()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader><space>', [[<cmd>lua require('telescope.builtin').find_files({previewer = false})<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>ss', [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>sh', [[<cmd>lua require('telescope.builtin').help_tags()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>st', [[<cmd>lua require('telescope.builtin').tags()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>sp', [[<cmd>lua require('telescope.builtin').grep_string()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>sd', [[<cmd>lua require('telescope.builtin').live_grep()<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>so', [[<cmd>lua require('telescope.builtin').tags{ only_current_buffer = true }<CR>]], { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>fr', [[<cmd>lua require('telescope.builtin').oldfiles()<CR>]], { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap('n', '<leader>bb', [[<cmd>lua require('telescope.builtin').buffers()<CR>]], { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap('n', '<leader><space>', [[<cmd>lua require('telescope.builtin').find_files({previewer = false})<CR>]], { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap('n', '<leader>ss', [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>]], { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap('n', '<leader>sh', [[<cmd>lua require('telescope.builtin').help_tags()<CR>]], { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap('n', '<leader>st', [[<cmd>lua require('telescope.builtin').tags()<CR>]], { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap('n', '<leader>sp', [[<cmd>lua require('telescope.builtin').grep_string()<CR>]], { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap('n', '<leader>sd', [[<cmd>lua require('telescope.builtin').live_grep()<CR>]], { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap('n', '<leader>so', [[<cmd>lua require('telescope.builtin').tags{ only_current_buffer = true }<CR>]], { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap('n', '<leader>fr', [[<cmd>lua require('telescope.builtin').oldfiles()<CR>]], { noremap = true, silent = true })
 
 -- Treesitter configuration
 -- Parsers must be installed manually via :TSInstall
@@ -275,8 +319,8 @@ for _, lsp in ipairs(servers) do
 end
 
 -- Example custom server
-local sumneko_root_path = vim.fn.getenv 'HOME' .. '/.local/bin/sumneko_lua' -- Change to your sumneko root installation
-local sumneko_binary = sumneko_root_path .. '/bin/Linux/lua-language-server'
+local sumneko_root_path = vim.fn.getenv 'HOME' .. '/.local/bin/' -- Change to your sumneko root installation
+local sumneko_binary = sumneko_root_path .. 'lua-language-server'
 
 -- Make runtime files discoverable to the server
 local runtime_path = vim.split(package.path, ';')
@@ -361,6 +405,23 @@ cmp.setup {
   },
 }
 
+-- ported from vim
+vim.cmd([[
+function! TextFileInit()
+  setlocal spell
+  setf markdown
+  :iab <expr> iii strftime("%y%m%d %H:%M:%S %a")
+endfunction
+]])
+
+vim.cmd([[
+:autocmd BufRead,BufNewFile /home/sys2/00/0A/* call TextFileInit()
+:autocmd BufRead,BufNewFile /home/sys2/00/0C/* call TextFileInit()
+:autocmd BufRead,BufNewFile /home/sys2/00/0L/* call TextFileInit()
+:autocmd BufRead,BufNewFile /home/sys2/00/0F/*/* call TextFileInit()
+:autocmd BufRead,BufNewFile /home/sys2/00/0P/*/* call TextFileInit()
+]])
+
 -- startify
 vim.g.startify_custom_header = "[]"
 vim.g.startify_files_number = 1000
@@ -371,12 +432,19 @@ vim.g.startify_files_number = 1000
 --     width = 80 -- sets the writing area width
 -- }
 
+-- tokyonight theme
+vim.g.tokyonight_style = "night" -- storm, night, day
+-- vim.g.tokyonight_transparent = "true" -- disable for day
+vim.g.tokyonight_hide_inactive_statusline = "true"
+vim.g.tokyonight_lualine_bold = "true"
+vim.cmd [[colorscheme tokyonight]]
+
 -- lualine setup
 local lualine = require 'lualine'
 local lualine_config = {
   options = {
     icons_enabled = false,
-    theme = 'palenight',
+    theme = 'tokyonight',
     component_separators = { left = '', right = ''},
     section_separators = { left = '', right = ''},
     disabled_filetypes = {},
@@ -407,7 +475,14 @@ local lualine_config = {
 lualine.setup(lualine_config)
 
 -- mapx
-require'mapx'.setup{ global = true }
+require'mapx'.setup{ global = true, whichkey = true }
+-- nnoremap("gD", "<cmd>lua vim.lsp.buf.declaration()<Cr>", "silent", "LSP: Goto declaration")
+-- -- Also supports setting WhichKey group names
+-- m.nname("<leader>l", "LSP")
+-- nnoremap("<leader>li", ":LspInfo<Cr>",    "LSP: Show LSP information")
+-- nnoremap("<leader>lr", ":LspRestart<Cr>", "LSP: Restart LSP")
+-- nnoremap("<leader>ls", ":LspStart<Cr>",   "LSP: Start LSP")
+-- nnoremap("<leader>lS", ":LspStop<Cr>",    "LSP: Stop LSP")
 -- nnoremap("j", "v:count ? 'j' : 'gj'", "expr")
 -- nnoremap("k", "v:count ? 'k' : 'gk'", "expr")
 -- nmap("J", "5j")
@@ -416,23 +491,46 @@ require'mapx'.setup{ global = true }
 -- inoremap("<S-Tab>", [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], "silent", "expr")
 -- map("<M-/>", ":Commentary<Cr>", "silent")
 -- cmd("LspDiag", function() vim.lsp.diagnostic.set_loclist() end, {nargs = 0})
+-- Redefining 
+nnoremap('<leader><space>', "<cmd>lua require('telescope.builtin').find_files({previewer = false})<CR>", 'silent', 'Find Files')
+nnoremap('<leader>bb', "<cmd>lua require('telescope.builtin').buffers()<CR>", 'silent', 'Buffers')
+nnoremap('<leader>ss', "<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>", 'silent', 'Find in current buffer')
+nnoremap('<leader>sh', "<cmd>lua require('telescope.builtin').help_tags()<CR>", 'silent', 'Help Tags')
+nnoremap('<leader>st', "<cmd>lua require('telescope.builtin').tags()<CR>", 'silent', 'Tags')
+nnoremap('<leader>sp', "<cmd>lua require('telescope.builtin').grep_string()<CR>", 'silent', 'Grep String')
+nnoremap('<leader>sd', "<cmd>lua require('telescope.builtin').live_grep()<CR>", 'silent', 'Live Grep')
+nnoremap('<leader>so', "<cmd>lua require('telescope.builtin').tags{ only_current_buffer = true }<CR>", 'silent', 'Tags')
+nnoremap('<leader>fr', "<cmd>lua require('telescope.builtin').oldfiles()<CR>", 'silent', 'Recentf')
 -- Maps
-nnoremap("<F5>", ":q<CR>")
-inoremap("<F5>", "<Esc>:q<CR>")
-nnoremap("<F6>", ":NvimTreeToggle<CR>")
-inoremap("<F6>", "<Esc>:NvimTreeToggle<CR>")
-nnoremap("<F9>", ":w<CR>")
-inoremap("<F9>", "<Esc>:w<CR>a")
-nnoremap("<F10>", ":q")
-inoremap("<F10>", "<Esc>:q")
-nnoremap("<F12>", ":x<CR>")
-inoremap("<F12>", "<Esc>:x<CR>a")
-nnoremap("zx", ":q<CR>")
-nnoremap("zs", ":w<CR>")
-nnoremap("ZX", ":q!<CR>")
-nnoremap("ZS", ":x<CR>")
-nnoremap("<leader>ff", ":e ")
-vim.api.nvim_set_keymap('n', '<leader>oo', "<cmd>lua require'centerpad'.toggle{ leftpad = 25, rightpad = 25 }<cr>", { silent = true, noremap = true })
+nnoremap('<F5>', ':q<CR>', 'Close Buffer')
+inoremap('<F5>', '<Esc>:q<CR>', 'Close Buffer')
+nnoremap('<F6>', ':NvimTreeToggle<CR>', 'File Tree')
+inoremap('<F6>', '<Esc>:NvimTreeToggle<CR>', 'File Tree')
+nnoremap('<F9>', ':w<CR>', 'Save')
+inoremap('<F9>', '<Esc>:w<CR>a', 'Save')
+nnoremap('<F10>', ':q', 'Quit')
+inoremap('<F10>', '<Esc>:q', 'Quit')
+nnoremap('<F12>', ':x<CR>', 'Save and Quit')
+inoremap('<F12>', '<Esc>:x<CR>a', 'Save and Quit')
+nnoremap('zx', ':q<CR>', 'Quit')
+nnoremap('zs', ':w<CR>', 'Save')
+nnoremap('ZX', ':q!<CR>', 'Quit without saving')
+nnoremap('ZS', ':x<CR>', 'Save and Quit')
+nnoremap('<leader>ff', ':e ', 'Open file')
+nnoremap('<leader>oo', "<cmd>lua require'centerpad'.toggle{ leftpad = 25, rightpad = 25 }<cr>", "silent", "Centerpad")
+nnoremap('<leader>oc', ":ZenMode<CR>", "Zen Mode")
+nnoremap('<leader>ou', ":MundoToggle<CR>", "Undo Tree")
+-- C-s-h ;; evil-window-decrease-width
+-- C-s-j ;; evil-window-decrease-height
+-- C-s-k ;; evil-window-increase-height
+-- C-s-l ;; evil-window-increase-width
+-- nnoremap('<Leader>sp', :Rg<CR> " Search text in files in current directory
+nnoremap('<Leader>gg', ":G<CR>", "Git status")
+-- nnoremap('<Leader>gs', ":GFiles<CR>", "Git files")
+-- nnoremap('<Leader>gS', ":GFiles?<CR>", "Modified git files")
+-- nnoremap('<Leader>gll', ":Commits<CR>", "Project's commits")
+-- nnoremap('<Leader>gLl', ":BCommits<CR>", "Current file's commits")
+nnoremap('<Leader>n', ":noh<CR>", "Remove Highlights")
 
 -- better escape
 require("better_escape").setup {
@@ -541,7 +639,7 @@ require'nvim-tree'.setup {
   }
 }
 
--- org mode
+-- org mode treesitter
 local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
 parser_config.org = {
   install_info = {
@@ -566,3 +664,7 @@ require('orgmode').setup({
   org_agenda_files = {'~/Dropbox/org/*', '~/my-orgs/**/*'},
   org_default_notes_file = '~/Dropbox/org/refile.org',
 })
+
+-- undo tree
+vim.g.undofile = 'true'
+vim.g.unundodir = '~/.config/nvim/undo'
