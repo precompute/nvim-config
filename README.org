@@ -1,0 +1,21 @@
+#+TITLE: nvim Config
+
+#+HTML: <img src="Screenshot211129.jpg" align="center">
+
+* nvim
+
+[21-11-29 21:50:00] nvim is useful in a pinch.
+
+Unfortunately, my primary editor is Emacs.
+
+This is my config for a rainy day.  I tried to make it as similar to my configured emacs as possible.
+
+I use Neovim 0.6.0.  This config should be immediately usable after running ~:PackerSync~.
+
+I ported my old vimscript config to lua.  The old config is saved as ~.back~.
+
+I used [[https://github.com/nvim-lua/kickstart.nvim][kickstart]] to familiarize myself with the new lua config.
+
+Some parts of this config contain lines from [[https://github.com/folke/dot/tree/master/config/nvim][user "folke"'s nvim config.]]
+
+# [[./Screenshot211129.jpg]]
