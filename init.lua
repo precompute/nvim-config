@@ -75,9 +75,11 @@ require('packer').startup(function()
       require('nvim-autopairs').setup{}
     end
   }
-  use {'nvim-orgmode/orgmode', config = function()
-         require('orgmode').setup{}
-  end
+  use {
+    'nvim-orgmode/orgmode', -- org mode support
+    config = function()
+      require('orgmode').setup{}
+    end
   }
   use 'simnalamburt/vim-mundo' -- undo tree
   -- use { -- I don't like it
@@ -123,6 +125,16 @@ require('packer').startup(function()
   -- use 'roman/golden-ratio' -- golden ratio split
   use 'tpope/vim-surround' -- surround with text
   -- use 'wellle/visual-split.vim' -- split easily
+  use { -- use '~/.fzf'
+    'junegunn/fzf',
+    run = './install --bin'
+  }
+  use 'junegunn/fzf.vim' -- useful functions
+  use 'preservim/tagbar' -- shows ctags
+  use 'tommcdo/vim-exchange' -- exchange regions of text, cx is default but gx works now.
+  use 'tommcdo/vim-ninja-feet' -- adds a motion that acts inside text objects, 
+  use 'tommcdo/vim-centaur' -- center line of text, gzi_  
+  use 'simeji/winresizer' -- C-e to start window resize mode
 end)
 
 --Incremental live completion (note: this is now a default on master)
@@ -186,11 +198,36 @@ vim.cmd [[
 vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true })
 
 --Map blankline
-vim.g.indent_blankline_char = '┊'
+vim.g.indent_blankline_char = "│"
 vim.g.indent_blankline_filetype_exclude = { 'help', 'packer' }
 vim.g.indent_blankline_buftype_exclude = { 'terminal', 'nofile' }
 vim.g.indent_blankline_char_highlight = 'LineNr'
 vim.g.indent_blankline_show_trailing_blankline_indent = false
+vim.g.indent_blankline_use_treesitter = true
+vim.g.indent_blankline_show_current_context = true
+vim.g.indent_blankline_context_patterns = {
+  "class",
+  "return",
+  "function",
+  "method",
+  "^if",
+  "^while",
+  "jsx_element",
+  "^for",
+  "^object",
+  "^table",
+  "block",
+  "arguments",
+  "if_statement",
+  "else_clause",
+  "jsx_element",
+  "jsx_self_closing_element",
+  "try_statement",
+  "catch_clause",
+  "import_statement",
+  "operation_type",
+}
+vim.wo.colorcolumn = "99999" -- HACK: work-around for https://github.com/lukas-reineke/indent-blankline.nvim/issues/59
 
 -- Gitsigns
 -- require('gitsigns').setup {
@@ -405,6 +442,19 @@ cmp.setup {
   },
 }
 
+-- my settings
+vim.opt.clipboard = "unnamedplus" -- sync with system clipboard
+vim.opt.confirm = true -- confirm to save changes before exiting modified buffer
+vim.opt.cursorline = true -- Enable highlighting of the current line
+vim.opt.expandtab = true -- Use spaces instead of tabs
+vim.opt.guifont = "Fira Code:h12"
+vim.opt.grepprg = "rg --vimgrep"
+vim.opt.grepformat = "%f:%l:%c:%m"
+vim.opt.list = true -- Show some invisible characters (tabs...
+vim.opt.showmode = false -- dont show mode since we have a statusline
+vim.opt.undolevels = 10000
+vim.opt.wildmode = "longest:full,full" -- Command-line completion mode
+
 -- ported from vim
 vim.cmd([[
 function! TextFileInit()
@@ -520,17 +570,23 @@ nnoremap('<leader>ff', ':e ', 'Open file')
 nnoremap('<leader>oo', "<cmd>lua require'centerpad'.toggle{ leftpad = 25, rightpad = 25 }<cr>", "silent", "Centerpad")
 nnoremap('<leader>oc', ":ZenMode<CR>", "Zen Mode")
 nnoremap('<leader>ou', ":MundoToggle<CR>", "Undo Tree")
+nnoremap('<leader>oi', ":TagbarToggle<CR>", "Tagbar")
+nnoremap('<leader>ot', ":NvimTreeToggle<CR>", "File Tree")
 -- C-s-h ;; evil-window-decrease-width
 -- C-s-j ;; evil-window-decrease-height
 -- C-s-k ;; evil-window-increase-height
 -- C-s-l ;; evil-window-increase-width
--- nnoremap('<Leader>sp', :Rg<CR> " Search text in files in current directory
+nnoremap('<Leader>sp', ":Rg<CR>", "Search text in files in current directory")
+-- nnoremap('<Leader>gg', ":Blines<CR>", "Search in current file")
 nnoremap('<Leader>gg', ":G<CR>", "Git status")
--- nnoremap('<Leader>gs', ":GFiles<CR>", "Git files")
--- nnoremap('<Leader>gS', ":GFiles?<CR>", "Modified git files")
--- nnoremap('<Leader>gll', ":Commits<CR>", "Project's commits")
--- nnoremap('<Leader>gLl', ":BCommits<CR>", "Current file's commits")
+nnoremap('<Leader>gs', ":GFiles<CR>", "Git files")
+nnoremap('<Leader>gS', ":GFiles?<CR>", "Modified git files")
+nnoremap('<Leader>gll', ":Commits<CR>", "Project's commits")
+nnoremap('<Leader>gLl', ":BCommits<CR>", "Current file's commits")
 nnoremap('<Leader>n', ":noh<CR>", "Remove Highlights")
+nnoremap('<Leader>hbb', ":Maps<CR>", "Maps")
+nnoremap('<Leader>hf', ":Commands<CR>", "Commands")
+nnoremap('<Leader>ht', ":Colors<CR>", "Color Schemes")
 
 -- better escape
 require("better_escape").setup {
@@ -543,8 +599,8 @@ require("better_escape").setup {
 -- Gitsigns
 require('gitsigns').setup {
   signs = {
-    add          = {hl = 'GitSignsAdd'   , text = '│', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
-    change       = {hl = 'GitSignsChange', text = '│', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+    add          = {hl = 'GitSignsAdd'   , text = '▍', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
+    change       = {hl = 'GitSignsChange', text = '▍', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
     delete       = {hl = 'GitSignsDelete', text = '_', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
     topdelete    = {hl = 'GitSignsDelete', text = '‾', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
     changedelete = {hl = 'GitSignsChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
@@ -668,3 +724,20 @@ require('orgmode').setup({
 -- undo tree
 vim.g.undofile = 'true'
 vim.g.unundodir = '~/.config/nvim/undo'
+
+-- winresizer
+vim.g.winresizer_vert_resize = 1
+vim.g.winresizer_horiz_resize = 1
+
+-- vim-exchange
+vim.cmd [[
+function! s:create_map(mode, lhs, rhs)
+	if !hasmapto(a:rhs, a:mode)
+		execute a:mode.'map '.a:lhs.' '.a:rhs
+	endif
+endfunction
+call s:create_map('n', 'gx', '<Plug>(Exchange)')
+call s:create_map('x', 'X', '<Plug>(Exchange)')
+call s:create_map('n', 'gxg', '<Plug>(ExchangeClear)')
+call s:create_map('n', 'gxx', '<Plug>(ExchangeLine)')
+]]
