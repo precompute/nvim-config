@@ -445,16 +445,15 @@ cmp.setup {
 -- my settings
 vim.opt.clipboard = "unnamedplus" -- sync with system clipboard
 vim.opt.confirm = true -- confirm to save changes before exiting modified buffer
-vim.opt.cursorline = true -- Enable highlighting of the current line
+vim.opt.cursorline = false -- Enable highlighting of the current line -- too slow
 vim.opt.expandtab = true -- Use spaces instead of tabs
-vim.opt.guifont = "Fira Code:h12"
 vim.opt.grepprg = "rg --vimgrep"
 vim.opt.grepformat = "%f:%l:%c:%m"
 vim.opt.list = true -- Show some invisible characters (tabs...
 vim.opt.showmode = false -- dont show mode since we have a statusline
 vim.opt.undolevels = 10000
 vim.opt.wildmode = "longest:full,full" -- Command-line completion mode
-
+vim.opt.scrolloff = 4
 -- ported from vim
 vim.cmd([[
 function! TextFileInit()
@@ -650,7 +649,7 @@ require'nvim-tree'.setup {
   auto_close          = false,
   open_on_tab         = true,
   hijack_cursor       = false,
-  update_cwd          = false,
+  update_cwd          = true,
   update_to_buf_dir   = {
     enable = true,
     auto_open = true,
