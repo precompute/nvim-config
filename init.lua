@@ -18,7 +18,7 @@ require('packer').startup(function()
   use 'wbthomason/packer.nvim' -- Package manager
   use 'tpope/vim-fugitive' -- Git commands in nvim
   use 'tpope/vim-rhubarb' -- Fugitive-companion to interact with github
-  use 'tpope/vim-commentary' -- "gc" to comment visual regions/lines
+  -- use 'tpope/vim-commentary' -- "gc" to comment visual regions/lines
   use 'ludovicchabant/vim-gutentags' -- Automatic tags management
   use { 'nvim-telescope/telescope.nvim', requires = { 'nvim-lua/plenary.nvim' } } -- UI to select things (files, grep results, open buffers...)
   -- use 'itchyny/lightline.vim' -- Fancier statusline
@@ -75,12 +75,12 @@ require('packer').startup(function()
       require('nvim-autopairs').setup{}
     end
   }
-  use {
-    'nvim-orgmode/orgmode', -- org mode support
-    config = function()
-      require('orgmode').setup{}
-    end
-  }
+  -- use {
+  --   'nvim-orgmode/orgmode', -- org mode support
+  --   config = function()
+  --     require('orgmode').setup{}
+  --   end
+  -- }
   use 'simnalamburt/vim-mundo' -- undo tree
   -- use { -- I don't like it
   --   'karb94/neoscroll.nvim', -- smooth scrolling
@@ -135,10 +135,25 @@ require('packer').startup(function()
   use 'tommcdo/vim-ninja-feet' -- adds a motion that acts inside text objects, 
   use 'tommcdo/vim-centaur' -- center line of text, gzi_  
   use 'simeji/winresizer' -- C-e to start window resize mode
+  use {
+    'numToStr/Comment.nvim',
+    config = function()
+      require("Comment").setup{}
+    end
+  }
+  -- use {
+  --   'windwp/windline.nvim',
+  --   config = function()
+  --     -- require('windline').setup{}
+  --     require('wlsample.bubble').setup{}
+  --   end,
+  -- }
+  use 'sainnhe/sonokai'
+  use 'lambdalisue/suda.vim'
 end)
 
 --Incremental live completion (note: this is now a default on master)
-vim.o.inccommand = 'nosplit'
+vim.o.inccommand = 'split'
 
 --Set highlight on search
 vim.o.hlsearch = true
@@ -450,10 +465,11 @@ vim.opt.expandtab = true -- Use spaces instead of tabs
 vim.opt.grepprg = "rg --vimgrep"
 vim.opt.grepformat = "%f:%l:%c:%m"
 vim.opt.list = true -- Show some invisible characters (tabs...
-vim.opt.showmode = false -- dont show mode since we have a statusline
+vim.opt.showmode = true -- dont show mode since we have a statusline
 vim.opt.undolevels = 10000
 vim.opt.wildmode = "longest:full,full" -- Command-line completion mode
 vim.opt.scrolloff = 4
+vim.opt.laststatus = 3 --global modeline
 -- ported from vim
 vim.cmd([[
 function! TextFileInit()
@@ -484,9 +500,13 @@ vim.g.startify_files_number = 1000
 -- tokyonight theme
 vim.g.tokyonight_style = "night" -- storm, night, day
 -- vim.g.tokyonight_transparent = "true" -- disable for day
-vim.g.tokyonight_hide_inactive_statusline = "true"
+-- vim.g.tokyonight_hide_inactive_statusline = "true"
 vim.g.tokyonight_lualine_bold = "true"
 vim.cmd [[colorscheme tokyonight]]
+
+-- sonokai theme
+vim.g.sonokai_style = 'andromeda'
+-- vim.cmd [[colorscheme sonokai]]
 
 -- lualine setup
 local lualine = require 'lualine'
@@ -494,10 +514,11 @@ local lualine_config = {
   options = {
     icons_enabled = false,
     theme = 'tokyonight',
-    component_separators = { left = '', right = ''},
-    section_separators = { left = '', right = ''},
+    component_separators = {left = '', right = ''},
+    section_separators = {left = '', right = ''},
     disabled_filetypes = {},
     always_divide_middle = true,
+    globalstatus = true
   },
   sections = {
     -- lualine_a = {'mode'},
@@ -507,7 +528,7 @@ local lualine_config = {
     lualine_x = {},
     lualine_y = {'encoding', 'fileformat'},
     lualine_z = {'branch', 'diff',
-                  {'diagnostics', sources={'nvim_lsp'}}}
+                  {'diagnostics', sources={'nvim_diagnostic'}}}
   },
   inactive_sections = {
     lualine_a = {},
@@ -598,8 +619,8 @@ require("better_escape").setup {
 -- Gitsigns
 require('gitsigns').setup {
   signs = {
-    add          = {hl = 'GitSignsAdd'   , text = '▍', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
-    change       = {hl = 'GitSignsChange', text = '▍', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+    add          = {hl = 'GitSignsAdd'   , text = '❚', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
+    change       = {hl = 'GitSignsChange', text = '❚', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
     delete       = {hl = 'GitSignsDelete', text = '_', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
     topdelete    = {hl = 'GitSignsDelete', text = '‾', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
     changedelete = {hl = 'GitSignsChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
@@ -715,10 +736,10 @@ require'nvim-treesitter.configs'.setup {
   ensure_installed = {'org'}, -- Or run :TSUpdate org
 }
 
-require('orgmode').setup({
-  org_agenda_files = {'~/Dropbox/org/*', '~/my-orgs/**/*'},
-  org_default_notes_file = '~/Dropbox/org/refile.org',
-})
+-- require('orgmode').setup({
+--   org_agenda_files = {'~/Dropbox/org/*', '~/my-orgs/**/*'},
+--   org_default_notes_file = '~/Dropbox/org/refile.org',
+-- })
 
 -- undo tree
 vim.g.undofile = 'true'

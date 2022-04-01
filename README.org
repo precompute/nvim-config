@@ -4,6 +4,10 @@
 
 * nvim
 
+[22-04-01 16:37:24] One big commit.  Changed a few things, didn't have an auto-commit job for this repo.  Most notable is setting ~laststatus~ to 3 for the new global statusline in Neovim.
+
+using nvim v0.7.0 now.
+
 [21-11-29 21:50:00] nvim is useful in a pinch.
 
 Unfortunately, my primary editor is Emacs.
