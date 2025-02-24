@@ -1,7 +1,5 @@
-#+TITLE: nvim Config
 #+HTML: <img src="logo.webp" align="center">
 
-* nvim
 [25-02-24 23:59:20] Update to Nvim v0.11-dev and strip out everything I don’t use.
 
 [22-04-01 16:37:24] One big commit.  Changed a few things, didn't have an auto-commit job for this repo.  Most notable is setting ~laststatus~ to 3 for the new global statusline in Neovim.
