@@ -19,7 +19,7 @@ require('packer').startup(function()
   use 'tpope/vim-fugitive' -- Git commands in nvim
   use 'tpope/vim-rhubarb' -- Fugitive-companion to interact with github
   -- use 'tpope/vim-commentary' -- "gc" to comment visual regions/lines
-  use 'ludovicchabant/vim-gutentags' -- Automatic tags management
+  use 'ludovicchabant/vim-gutentags' -- Automatic tags management -- what is this for anyway?
   use { 'nvim-telescope/telescope.nvim', requires = { 'nvim-lua/plenary.nvim' } } -- UI to select things (files, grep results, open buffers...)
   -- use 'itchyny/lightline.vim' -- Fancier statusline
   use 'lukas-reineke/indent-blankline.nvim' -- Add indentation guides even on blank lines
@@ -150,6 +150,25 @@ require('packer').startup(function()
   -- }
   use 'sainnhe/sonokai'
   use 'lambdalisue/suda.vim'
+  -- use 'rockerBOO/boo-colorscheme-nvim' -- doesn't work
+  use 'mcchrish/zenbones.nvim'
+  use 'catppuccin/nvim'
+  use 'rktjmp/lush.nvim'
+  use 'alaric/nortia.nvim'
+  use 'srcery-colors/srcery-vim'
+  use 'vimoxide/vim-cinnabar'
+  use 'fcpg/vim-fahrenheit'
+  use 'stevearc/aerial.nvim' -- like emacs' imenu
+  use {
+    'norcalli/nvim-colorizer.lua',
+    config = function()
+      require("colorizer").setup{}
+    end
+  }
+  use {
+      'glacambre/firenvim',
+      run = function() vim.fn['firenvim#install'](0) end 
+  }
 end)
 
 --Incremental live completion (note: this is now a default on master)
@@ -213,7 +232,7 @@ vim.cmd [[
 vim.api.nvim_set_keymap('n', 'Y', 'y$', { noremap = true })
 
 --Map blankline
-vim.g.indent_blankline_char = "│"
+vim.g.indent_blankline_char = " " -- "│"
 vim.g.indent_blankline_filetype_exclude = { 'help', 'packer' }
 vim.g.indent_blankline_buftype_exclude = { 'terminal', 'nofile' }
 vim.g.indent_blankline_char_highlight = 'LineNr'
@@ -465,11 +484,14 @@ vim.opt.expandtab = true -- Use spaces instead of tabs
 vim.opt.grepprg = "rg --vimgrep"
 vim.opt.grepformat = "%f:%l:%c:%m"
 vim.opt.list = true -- Show some invisible characters (tabs...
-vim.opt.showmode = true -- dont show mode since we have a statusline
+vim.opt.showmode = false
+-- vim.opt.showmode = true -- dont show mode since we have a statusline
 vim.opt.undolevels = 10000
 vim.opt.wildmode = "longest:full,full" -- Command-line completion mode
 vim.opt.scrolloff = 4
-vim.opt.laststatus = 3 --global modeline
+vim.opt.laststatus = 2
+vim.opt.autochdir = true 
+-- vim.opt.laststatus = 3 --global modeline
 -- ported from vim
 vim.cmd([[
 function! TextFileInit()
@@ -500,34 +522,109 @@ vim.g.startify_files_number = 1000
 -- tokyonight theme
 vim.g.tokyonight_style = "night" -- storm, night, day
 -- vim.g.tokyonight_transparent = "true" -- disable for day
--- vim.g.tokyonight_hide_inactive_statusline = "true"
+vim.g.tokyonight_hide_inactive_statusline = "true"
 vim.g.tokyonight_lualine_bold = "true"
-vim.cmd [[colorscheme tokyonight]]
+-- vim.cmd [[colorscheme tokyonight]]
+-- vim.api.nvim_command([[ -- It does change it to black but it doesn't work everywhere, will likely need to modify all similar faces.
+--     hi normal guibg=#000
+-- ]])
 
 -- sonokai theme
 vim.g.sonokai_style = 'andromeda'
+vim.g.sonokai_enable_italic = 1
+vim.g.sonokai_cursor = 'blue'
 -- vim.cmd [[colorscheme sonokai]]
 
+-- nortia theme
+-- require('nortia.theme').set_hour(1) --dark
+-- require('nortia.theme').set_contrast_threshold(4.5)
+-- require('nortia.theme').tint_bg(50, 0.3) --awesome!
+-- require('nortia.theme').tint_fg(50, 0.3)
+-- require('nortia.theme').tint(270, 0.01)
+-- require('nortia.theme').set_base(235, 84, 84)
+-- vim.cmd [[colorscheme nortia-nvim]]
+
+-- catppuccin theme
+-- vim.cmd [[colorscheme catppuccin]]
+
+-- srcery theme
+vim.g.srcery_italic = 1
+vim.g.srcery_black = '#000000'
+vim.cmd [[colorscheme srcery]]
+-- vim.cmd [[colorscheme dayfox]]
+
+-- cinnabar theme
+-- vim.cmd [[colorscheme cinnabar]]
+
 -- lualine setup
+local function llwindow() --does it work?
+  return vim.api.nvim_win_get_number(0)
+end
+
+local llc = {
+  blue   = '#2C78BF',
+  cyan   = '#0AAEB3',
+  black  = '#000000',
+  white  = '#BAA67F',
+  red    = '#EF2F27',
+  yellow = '#FBB829',
+  grey   = '#303030',
+}
+
+local mytheme = {
+  normal = {
+    a = { fg = llc.black, bg = llc.blue },
+    b = { fg = llc.white, bg = llc.grey },
+    c = { fg = llc.white, bg = llc.black },
+    x = { fg = llc.black, bg = llc.black },
+    y = { fg = llc.black, bg = llc.black },
+    z = { fg = llc.black, bg = llc.blue },
+  },
+
+  insert = { a = { fg = llc.black, bg = llc.yellow },
+             z = { fg = llc.black, bg = llc.yellow }, },
+  visual = { a = { fg = llc.black, bg = llc.cyan },
+             z = { fg = llc.black, bg = llc.cyan }, },
+  replace = { a = { fg = llc.black, bg = llc.red },
+              z = { fg = llc.black, bg = llc.red }, },
+
+  inactive = {
+    a = { fg = llc.white, bg = llc.black },
+    b = { fg = llc.white, bg = llc.black },
+    c = { fg = llc.black, bg = llc.black },
+    x = { fg = llc.black, bg = llc.black },
+    y = { fg = llc.white, bg = llc.black },
+    z = { fg = llc.white, bg = llc.black },
+  },
+}
+
 local lualine = require 'lualine'
 local lualine_config = {
   options = {
     icons_enabled = false,
-    theme = 'tokyonight',
+    -- theme = 'tokyonight',
+    -- theme = 'sonokai',
+    -- theme = 'iceberg_dark',
+    -- theme = '16color',
+    -- theme = 'seoul256',
+    theme = mytheme,
+    -- theme = 'ayu_light',
+    -- section_separators = { left = '', right = '' },
+    -- component_separators = { left = '', right = '' },
     component_separators = {left = '', right = ''},
     section_separators = {left = '', right = ''},
     disabled_filetypes = {},
-    always_divide_middle = true,
-    globalstatus = true
+    always_divide_middle = true
+    -- globalstatus = false
   },
   sections = {
     -- lualine_a = {'mode'},
     lualine_a = {'filename'},
     lualine_b = {'filetype'},
-    lualine_c = {'progress', 'location'},
-    lualine_x = {},
+    lualine_c = {'progress', 'location', llwindow},
+    lualine_x = {'diff'},
     lualine_y = {'encoding', 'fileformat'},
-    lualine_z = {'branch', 'diff',
+    lualine_z = {'branch',
                   {'diagnostics', sources={'nvim_diagnostic'}}}
   },
   inactive_sections = {
@@ -571,6 +668,7 @@ nnoremap('<leader>sp', "<cmd>lua require('telescope.builtin').grep_string()<CR>"
 nnoremap('<leader>sd', "<cmd>lua require('telescope.builtin').live_grep()<CR>", 'silent', 'Live Grep')
 nnoremap('<leader>so', "<cmd>lua require('telescope.builtin').tags{ only_current_buffer = true }<CR>", 'silent', 'Tags')
 nnoremap('<leader>fr', "<cmd>lua require('telescope.builtin').oldfiles()<CR>", 'silent', 'Recentf')
+nnoremap('<leader>si', '<cmd>AerialToggle!<CR>', 'silent', 'imenu')
 -- Maps
 nnoremap('<F5>', ':q<CR>', 'Close Buffer')
 inoremap('<F5>', '<Esc>:q<CR>', 'Close Buffer')
@@ -667,7 +765,7 @@ require'nvim-tree'.setup {
   hijack_netrw        = true,
   open_on_setup       = false,
   ignore_ft_on_setup  = {},
-  auto_close          = false,
+  -- auto_close          = false,
   open_on_tab         = true,
   hijack_cursor       = false,
   update_cwd          = true,
@@ -761,3 +859,29 @@ call s:create_map('x', 'X', '<Plug>(Exchange)')
 call s:create_map('n', 'gxg', '<Plug>(ExchangeClear)')
 call s:create_map('n', 'gxx', '<Plug>(ExchangeLine)')
 ]]
+
+require("aerial").setup({
+  backends = { "treesitter", "lsp", "markdown" },
+  close_behavior = "auto",
+  default_bindings = true,
+  default_direction = "prefer_left",
+})
+vim.cmd [[
+  autocmd BufEnter * silent! lcd %:p:h
+]]
+
+vim.cmd [[let g:firenvim_config = { 
+    \ 'globalSettings': {
+        \ 'alt': 'all',
+    \  },
+    \ 'localSettings': {
+        \ '.*': {
+            \ 'cmdline': 'neovim',
+            \ 'content': 'text',
+            \ 'priority': 0,
+            \ 'selector': 'textarea',
+            \ 'takeover': 'never',
+        \ },
+    \ }
+\ }]]
+-- vim.cmd [[ let fc['.*'] = { 'takeover': 'always', 'priority': 1 } ]]
