@@ -1,8 +1,8 @@
 #+TITLE: nvim Config
-
-#+HTML: <img src="Screenshot211129.jpg" align="center">
+#+HTML: <img src="logo.webp" align="center">
 
 * nvim
+[25-02-24 23:59:20] Update to Nvim v0.11-dev and strip out everything I don’t use.
 
 [22-04-01 16:37:24] One big commit.  Changed a few things, didn't have an auto-commit job for this repo.  Most notable is setting ~laststatus~ to 3 for the new global statusline in Neovim.
 
@@ -21,5 +21,3 @@ I ported my old vimscript config that I've been carrying since 2016 to lua.  The
 I used [[https://github.com/nvim-lua/kickstart.nvim][kickstart]] to familiarize myself with the new lua config.
 
 Some parts of this config contain lines from [[https://github.com/folke/dot/tree/master/config/nvim][user "folke"'s nvim config.]]
-
-# [[./Screenshot211129.jpg]]
