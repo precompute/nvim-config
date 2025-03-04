@@ -124,6 +124,13 @@ autocmd!
 autocmd TextYankPost * silent! lua vim.highlight.on_yank()
 augroup end
 ]]
+vim.cmd([[
+function! TextFileInit()
+  setlocal spell
+  setf markdown
+  :iab <expr> iii strftime("%y%m%d %H:%M:%S %a")
+endfunction
+]])
 -- Convert to something like sculpture-themes-dark-theme.el
 vim.g.srcery_italic         = 1
 vim.g.srcery_black          = 'NONE'
