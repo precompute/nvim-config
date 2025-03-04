@@ -131,6 +131,13 @@ function! TextFileInit()
   :iab <expr> iii strftime("%y%m%d %H:%M:%S %a")
 endfunction
 ]])
+vim.cmd([[
+:autocmd BufRead,BufNewFile /home/sys2/00/0A/* call TextFileInit()
+:autocmd BufRead,BufNewFile /home/sys2/00/0C/* call TextFileInit()
+:autocmd BufRead,BufNewFile /home/sys2/00/0L/* call TextFileInit()
+:autocmd BufRead,BufNewFile /home/sys2/00/0F/*/* call TextFileInit()
+:autocmd BufRead,BufNewFile /home/sys2/00/0P/*/* call TextFileInit()
+]])
 -- Convert to something like sculpture-themes-dark-theme.el
 vim.g.srcery_italic         = 1
 vim.g.srcery_black          = 'NONE'
