@@ -98,6 +98,7 @@ vim.opt.ttyfast       = true
 vim.opt.mouse         = "a"
 vim.opt.hidden        = true
 vim.opt.tabstop       = 4
+vim.opt.ignorecase    = true
 vim.opt.smartcase     = true
 vim.opt.incsearch     = true
 vim.opt.clipboard     = "unnamedplus"
@@ -118,6 +119,12 @@ vim.keymap.set("n", "<F12>", ":x<CR>")
 vim.keymap.set("i", "<F12>", "<Esc>:x<CR>a")
 vim.keymap.set("n", "zx", ":q!<CR>", { silent = true })
 vim.keymap.set("n", "zs", ":w<CR>", { silent = true })
+
+vim.keymap.set('i', '<D-C-w><D-C-h>', '<Esc><C-w>h', opts)
+vim.keymap.set('i', '<D-C-w><D-C-j>', '<Esc><C-w>j', opts)
+vim.keymap.set('i', '<D-C-w><D-C-k>', '<Esc><C-w>k', opts)
+vim.keymap.set('i', '<D-C-w><D-C-l>', '<Esc><C-w>l', opts)
+
 vim.cmd [[
 augroup YankHighlight
 autocmd!
