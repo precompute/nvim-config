@@ -88,6 +88,7 @@ require("lazy").setup({
              lualine.setup(lualine_config)
           end
          },
+         {"farmergreg/vim-lastplace"},
       },})
 vim.opt.laststatus    = 2
 vim.opt.showmode      = false
