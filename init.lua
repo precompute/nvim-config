@@ -126,6 +126,23 @@ vim.keymap.set('i', '<D-C-w><D-C-j>', '<Esc><C-w>j', opts)
 vim.keymap.set('i', '<D-C-w><D-C-k>', '<Esc><C-w>k', opts)
 vim.keymap.set('i', '<D-C-w><D-C-l>', '<Esc><C-w>l', opts)
 
+local yank_restore_pos = nil
+local function whole_buffer_textobj()
+  yank_restore_pos = vim.api.nvim_win_get_cursor(0)
+  vim.cmd("normal! ggVG")
+end
+vim.keymap.set({ "x", "o" }, "ag", whole_buffer_textobj, { silent = true })
+vim.keymap.set({ "x", "o" }, "ig", whole_buffer_textobj, { silent = true })
+vim.api.nvim_create_autocmd("TextYankPost", {
+  callback = function()
+    if yank_restore_pos and vim.v.event.operator == "y" then
+      local pos = yank_restore_pos
+      pcall(vim.api.nvim_win_set_cursor, 0, pos)
+    end
+    yank_restore_pos = nil
+  end,
+})
+
 vim.cmd [[
 augroup YankHighlight
 autocmd!
